@@ -1,0 +1,173 @@
+SENIOR BACKEND ENGINEER — TECHNICAL ASSESSMENT
+
+Project: Financial Transaction API
+
+Time Limit: 1 Hour
+
+OBJECTIVE
+
+You are given an existing Go + PostgreSQL REST API for managing financial accounts and transactions.
+
+Your task is to review the existing implementation, identify issues, and improve the transaction system so that it behaves correctly under normal and concurrent usage.
+
+Focus on correctness, data consistency, reliability, and clean implementation.
+
+TASKS
+
+1. TRANSACTION PROCESSING
+
+Review the existing account transfer functionality.
+
+Ensure that a transfer correctly:
+
+* Validates the source account
+* Validates the destination account
+* Validates the transaction amount
+* Checks the available balance
+* Debits the source account
+* Credits the destination account
+* Records the transaction
+
+A failed transfer must not leave partial changes in the database.
+
+2. CONCURRENT TRANSACTIONS
+
+The system may receive multiple transfer requests at the same time.
+
+Update the implementation so concurrent transfers cannot produce an incorrect account balance or invalid transaction state.
+
+Example:
+
+Account balance: 1,000
+
+At approximately the same time:
+
+* Transfer 600
+* Transfer 500
+
+The system must maintain a valid final state.
+
+3. IDEMPOTENCY
+
+Add support for an Idempotency-Key HTTP header for transfer requests.
+
+If the same transfer request is submitted multiple times with the same idempotency key, the system must not create multiple transactions.
+
+The repeated request should return the result of the previously processed request.
+
+Idempotency must remain correct when duplicate requests arrive concurrently.
+
+4. VALIDATION
+
+Ensure invalid requests are rejected appropriately.
+
+At minimum, handle:
+
+* Zero transaction amount
+* Negative transaction amount
+* Invalid source account
+* Invalid destination account
+* Inactive account
+* Same source and destination account
+* Insufficient balance
+* Invalid request data
+
+Return appropriate HTTP status codes and clear error responses.
+
+Do not expose internal database errors to API clients.
+
+5. DATABASE
+
+Review the database operations related to accounts and transactions.
+
+Identify potential problems with:
+
+* Transaction boundaries
+* Concurrent updates
+* Account balance consistency
+* Transaction history queries
+* Query efficiency
+
+Make only meaningful database changes.
+
+6. TESTING
+
+Add or improve automated tests.
+
+Tests should cover important transaction scenarios, including:
+
+* Successful transfer
+* Insufficient balance
+* Invalid amount
+* Invalid account
+* Inactive account
+* Same source and destination account
+* Transaction failure/rollback
+* Duplicate idempotency key
+* Concurrent transfers
+* Concurrent requests using the same idempotency key
+
+Tests should verify actual application and database behavior, not only HTTP response codes.
+
+7. ERROR HANDLING
+
+Review the existing error handling.
+
+Make sure errors returned by the API are:
+
+* Clear
+* Consistent
+* Appropriate for the situation
+* Safe for external clients
+
+Do not expose database implementation details or sensitive internal information.
+
+EXPECTED RESULT
+
+By the end of the assessment, the transaction system should:
+
+* Correctly process valid transfers
+* Prevent invalid transactions
+* Maintain consistent account balances
+* Handle concurrent requests safely
+* Prevent duplicate processing
+* Properly handle database failures
+* Provide appropriate API errors
+* Have meaningful automated tests
+
+CODE QUALITY
+
+Keep the implementation simple and maintainable.
+
+Avoid:
+
+* Unnecessary dependencies
+* Unused code
+* Artificial complexity
+* Unnecessary abstractions
+* Duplicate logic
+* Changes unrelated to the assessment
+
+Use idiomatic Go and follow the existing project structure where practical.
+
+SUBMISSION
+
+Before submitting your solution:
+
+1. Make sure the project builds successfully.
+2. Run all tests.
+3. Add or update tests for your changes.
+4. Format the Go code.
+5. Briefly document important implementation decisions.
+
+You do not need to redesign the entire application.
+
+Prioritize correctness and reliability over adding new features.
+
+TIME MANAGEMENT
+
+You have approximately 1 hour.
+
+You are not expected to complete every possible improvement.
+
+Prioritize the transaction logic, concurrency, idempotency, and tests.
